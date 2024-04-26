@@ -34,10 +34,17 @@ async function run() {
     // create database and collection on mongoDB
     const craftsCollection = client.db("crafts").collection("crafts");
 
-    // add craft
+    // add craft data store in database (Create)
     app.post("/crafts", async (req, res) => {
       const newCraft = req.body;
       const result = await craftsCollection.insertOne(newCraft);
+      res.send(result);
+    });
+
+    // get all craft data from database(Read)
+    app.get("/crafts", async (req, res) => {
+      const cursor = craftsCollection.find();
+      const result = await cursor.toArray();
       res.send(result);
     });
 
