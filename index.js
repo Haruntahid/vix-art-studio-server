@@ -30,6 +30,17 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    // create database and collection on mongoDB
+    const craftsCollection = client.db("crafts").collection("crafts");
+
+    // add craft
+    app.post("/crafts", async (req, res) => {
+      const newCraft = req.body;
+      const result = await craftsCollection.insertOne(newCraft);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
