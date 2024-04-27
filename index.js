@@ -65,6 +65,33 @@ async function run() {
       res.send(result);
     });
 
+    // update a craft
+    app.put("/craft/:id", async (req, res) => {
+      const id = req.params.id;
+      const craft = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateCraft = {
+        $set: {
+          photo: craft.photo,
+          item_name: craft.item_name,
+          subcategory_name: craft.subcategory_name,
+          short_description: craft.short_description,
+          price: craft.price,
+          rating: craft.rating,
+          customization: craft.customization,
+          processing_time: craft.processing_time,
+          stockStatus: craft.stockStatus,
+        },
+      };
+      const result = await craftsCollection.updateOne(
+        filter,
+        updateCraft,
+        options
+      );
+      res.send(result);
+    });
+
     // delete a data specific data from database
     app.delete("/crafts/:id", async (req, res) => {
       const id = req.params.id;
