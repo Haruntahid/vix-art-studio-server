@@ -33,6 +33,7 @@ async function run() {
 
     // create database and collection on mongoDB
     const craftsCollection = client.db("crafts").collection("crafts");
+    const categoryCollection = client.db("crafts").collection("category");
 
     // add craft data store in database (Create)
     app.post("/crafts", async (req, res) => {
@@ -44,6 +45,13 @@ async function run() {
     // get all craft data from database(Read)
     app.get("/crafts", async (req, res) => {
       const cursor = craftsCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // get all category data from database(Read)
+    app.get("/category", async (req, res) => {
+      const cursor = categoryCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
@@ -60,6 +68,15 @@ async function run() {
     app.get("/crafts/:email", async (req, res) => {
       const { email } = req.params;
       const query = { email: email };
+      const cursor = craftsCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // get a specific craft data from database based on category(Read)
+    app.get("/crafts/subcategory/:subcategory_name", async (req, res) => {
+      const { subcategory_name } = req.params;
+      const query = { subcategory_name: subcategory_name };
       const cursor = craftsCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
